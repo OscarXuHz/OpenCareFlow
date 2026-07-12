@@ -6,4 +6,4 @@ The current Git history records contributions from:
 - Ni Jiachen
 - lhjlol
 
-This list records historical authorship only. It does not by itself document consent to a new public license. Public release requires the rights holders to confirm the selected license and any relevant employment, university, funder, competition, or third-party IP terms.
+This list records historical authorship. Every contributor remains responsible for ensuring that their contribution can be distributed under the project's GNU Affero General Public License, version 3 or later, and does not violate any employment, university, funder, competition, or third-party IP terms.

@@ -1,24 +1,23 @@
 # CareFlow 護流
 
+[![CI](https://github.com/OscarXuHz/OpenCareFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/OscarXuHz/OpenCareFlow/actions/workflows/ci.yml)
+[![License: AGPL-3.0-or-later](https://img.shields.io/badge/License-AGPL--3.0--or--later-blue.svg)](LICENSE)
+
 > AI-assisted document workflows for frontline elderly-care teams.
 > 「你護老，我護你。」
 
-CareFlow is a research and demonstration prototype built around one rule: AI prepares a draft and a human reviews it before operational use. It combines a React frontend, a FastAPI backend, SQLite, local file storage, and optional external AI providers.
+CareFlow is a public, research-and-demonstration prototype for elderly-care teams. It combines a React frontend, FastAPI backend, SQLite, local file storage, and optional external AI providers. Its operating principle is simple: **AI prepares a draft; a human reviews it before operational use.**
 
 > [!WARNING]
-> CareFlow is not a clinical system, compliance-certified records system, or production-ready multi-tenant service. Do not process real personal or health data until your organization has completed its own security, privacy, provider-contract, retention, and legal review.
+> CareFlow is **not** a clinical system, compliance-certified records system, or production-ready multi-tenant service. The demo's HTTP endpoint and Basic Auth do not provide application authentication, authorization, audit logging, or tenant isolation. Do not process real personal or health data until the deploying organization has completed its own security, privacy, provider, retention, and legal review.
 
-## Release status
+## Status
 
-This repository is being prepared for public release. Do not make it public yet. The remaining release blockers are:
+**v0.5.0 — public source release.** The repository contains only source code and explicitly synthetic fixtures. It deliberately excludes third-party welfare-form PDFs, private credentials, runtime data, recordings, and generated outputs.
 
-- remove sensitive data and credentials from every Git ref, or publish a clean snapshot;
-- rotate all credentials that ever appeared in Git history;
-- resolve the PyMuPDF AGPL/commercial licensing path;
-- obtain contributor approval for the selected project license;
-- remove or obtain redistribution permission for bundled third-party PDF forms.
-
-See [Third-party notices](./THIRD_PARTY_NOTICES.md) for the current licensing boundary.
+- The project is licensed under the GNU Affero General Public License, version 3 or later; see [LICENSE](LICENSE).
+- CareFlow uses PyMuPDF, which is distributed under AGPL or commercial terms. The AGPL license for this project is the compatible open-source distribution path. See [Third-party notices](THIRD_PARTY_NOTICES.md).
+- Welfare-form PDFs are not included. Operators must obtain permitted copies directly from their publishers as described in [backend/data/templates/README.md](backend/data/templates/README.md).
 
 ## Workflows
 
@@ -30,8 +29,6 @@ See [Third-party notices](./THIRD_PARTY_NOTICES.md) for the current licensing bo
 | **θ** Custom templates | Blank PDF | Detected fields and reusable mapping | Field/bounding-box audit before publishing |
 
 Mock mode is available when provider keys are absent. Mock output demonstrates the workflow only; it is not evidence of real extraction quality.
-
-Third-party welfare-form PDFs are not included in the public tree. Operators must obtain permitted copies from the publishers and place them as described in [backend/data/templates/README.md](./backend/data/templates/README.md).
 
 ## Architecture
 
@@ -54,15 +51,15 @@ FastAPI
 
 The active implementation does not use Celery or Alembic. It is designed as a single-node demo; background work is not durable across process restarts.
 
-For a code-level walkthrough, see [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md).
+For a code-level walkthrough, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Quick start with Docker
 
-Requirements: Docker Compose and OpenSSL.
+Requirements: Docker Compose v2 and OpenSSL.
 
 ```bash
-git clone https://github.com/OscarXuHz/CareFlow.git
-cd CareFlow
+git clone https://github.com/OscarXuHz/OpenCareFlow.git
+cd OpenCareFlow
 
 # Compose reads the root .env file.
 cp .env.example .env
@@ -77,10 +74,9 @@ unset CAREFLOW_DEMO_PASSWORD
 docker compose up --build -d
 
 curl -i http://127.0.0.1:8080/healthz
-open http://127.0.0.1:8080
 ```
 
-Stop the stack with `docker compose down`.
+Open http://127.0.0.1:8080 in a browser and sign in as `careflow-demo` with the password entered above. Stop the stack with `docker compose down`.
 
 To generate clearly synthetic volunteer-form images for a demo:
 
@@ -93,6 +89,8 @@ The generated images and all runtime data are ignored by Git.
 ## Local development
 
 ### Backend
+
+Requirements: Python 3.11 or later.
 
 ```bash
 cd backend
@@ -107,6 +105,8 @@ uvicorn app.main:app --reload --port 8000
 The backend creates its SQLite tables at startup.
 
 ### Frontend
+
+Requirements: Node.js 20 or later and npm.
 
 ```bash
 cd frontend
@@ -127,7 +127,7 @@ CareFlow has three independent provider channels. Leave a channel's credentials 
 | Vision | `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`, deployment/model variables | Uploaded images or rendered PDF pages |
 | Speech | `DASHSCOPE_API_KEY`, `BAILIAN_ASR_MODEL` | Audio uploaded through DashScope's temporary OSS flow |
 
-Use the root [`.env.example`](./.env.example) with Docker Compose and [`backend/.env.example`](./backend/.env.example) for direct backend development. Never commit populated environment files.
+Use the root [`.env.example`](.env.example) with Docker Compose and [`backend/.env.example`](backend/.env.example) for direct backend development. Never commit populated environment files.
 
 ## Data handling
 
@@ -140,7 +140,7 @@ Important boundaries:
 - Nginx Basic Auth is a demo guard, not user-level identity, RBAC, or audit logging;
 - sample files must be explicitly synthetic and must not use real names, phone numbers, identity numbers, addresses, organizations, or service records.
 
-See [docs/DATA_HANDLING.md](./docs/DATA_HANDLING.md) for the full inventory and operator checklist.
+See [docs/DATA_HANDLING.md](docs/DATA_HANDLING.md) for the full inventory and operator checklist.
 
 ## Repository layout
 
@@ -176,18 +176,23 @@ cd ../frontend
 npm ci
 npm run build
 npm audit
+
+cd ..
+bash scripts/oss-preflight.sh
 ```
 
-The release gate also requires a clean-clone test with no private `.env`, a secret scan across all refs, and a review of bundled binary assets.
+`oss-preflight.sh` checks the current public working tree for prohibited runtime paths, obvious credentials, and Hong Kong phone/HKID patterns. It requires Git, Bash, and Python 3. It complements—not replaces—review of all Git history, dependency licenses, and binary assets before a release.
 
 ## Deployment boundary
 
-[`docker-compose.deploy.yml`](./docker-compose.deploy.yml) is an example for images your organization has built and published. Set `CAREFLOW_BACKEND_IMAGE` and `CAREFLOW_FRONTEND_IMAGE` in the root `.env`. The file does not point to official CareFlow images, and it should not be treated as a production security architecture.
+[`docker-compose.deploy.yml`](docker-compose.deploy.yml) is an example for images your organization has built and published. Set `CAREFLOW_BACKEND_IMAGE` and `CAREFLOW_FRONTEND_IMAGE` in the root `.env`. The file does not point to official CareFlow images and is not a production security architecture.
+
+Before any shared deployment, use HTTPS, add application-level authentication and authorization, isolate encryption keys and backups, set retention and deletion policies, complete provider/privacy review, and obtain an independent security review. Basic Auth alone is not enough.
 
 ## Contributing and security
 
-Read [CONTRIBUTING.md](./CONTRIBUTING.md) before opening a pull request. Report vulnerabilities or accidental personal-data exposure through the private process in [SECURITY.md](./SECURITY.md), never through a public issue.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Report vulnerabilities or accidental personal-data exposure through the private process in [SECURITY.md](SECURITY.md), never through a public issue.
 
 ## License
 
-A project license decision is still pending public-release clearance. The source tree currently contains an MIT [LICENSE](./LICENSE), but PyMuPDF is offered under AGPL or a commercial license, and bundled third-party forms are not covered by the CareFlow source license. Resolve those items before distributing the repository or container images.
+CareFlow is licensed under the GNU Affero General Public License, version 3 or later. The license covers CareFlow source code only; it does not grant rights to third-party provider services, fonts, dependencies, or welfare-form PDFs. Review [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) before redistributing a modified version or deploying it for users over a network.

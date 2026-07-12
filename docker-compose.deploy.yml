@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ${CAREFLOW_BACKEND_IMAGE:?Set CAREFLOW_BACKEND_IMAGE in .env}:${CAREFLOW_VERSION:-0.4.8}
+    image: ${CAREFLOW_BACKEND_IMAGE:?Set CAREFLOW_BACKEND_IMAGE in .env}:${CAREFLOW_VERSION:-0.5.0}
     container_name: careflow-backend
     environment:
       APP_HOST: ${APP_HOST:-0.0.0.0}
@@ -33,7 +33,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ${CAREFLOW_FRONTEND_IMAGE:?Set CAREFLOW_FRONTEND_IMAGE in .env}:${CAREFLOW_VERSION:-0.4.8}
+    image: ${CAREFLOW_FRONTEND_IMAGE:?Set CAREFLOW_FRONTEND_IMAGE in .env}:${CAREFLOW_VERSION:-0.5.0}
     container_name: careflow-frontend
     depends_on:
       backend:

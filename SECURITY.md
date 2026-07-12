@@ -13,7 +13,7 @@ Do not open a public issue for:
 - personal, health, identity, or organization-confidential data;
 - a repository history object that should have been removed.
 
-Use the repository's **Security** tab and select **Report a vulnerability** to open a private security advisory. If private reporting is unavailable, contact the repository owner privately through GitHub before sharing details. Include affected versions, reproduction steps, impact, and a safe way to validate the fix. Do not attach real service-user data.
+Use the repository's [private vulnerability-reporting form](https://github.com/OscarXuHz/OpenCareFlow/security/advisories/new) to open a private security advisory. If private reporting is unavailable, contact the repository owner privately through GitHub before sharing details. Include affected versions, reproduction steps, impact, and a safe way to validate the fix. Do not attach real service-user data.
 
 ## Accidental data exposure
 

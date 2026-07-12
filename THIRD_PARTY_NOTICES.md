@@ -1,14 +1,10 @@
-# Third-Party Notices and Release Blockers
+# Third-Party Notices
 
-This file records known licensing boundaries for open-source preparation. It is not a complete software bill of materials or legal advice.
+This file records known licensing boundaries for the public CareFlow source release. It is not a complete software bill of materials or legal advice.
 
 ## PyMuPDF / MuPDF
 
-CareFlow directly uses PyMuPDF for PDF rendering, extraction, form filling, and template analysis. PyMuPDF and MuPDF are offered under the GNU AGPL and commercial licenses. The project must choose and document a compliant route before public distribution of the repository or container images:
-
-- comply with the applicable AGPL requirements;
-- obtain an appropriate commercial license; or
-- replace PyMuPDF with a dependency compatible with the selected CareFlow distribution model.
+CareFlow directly uses PyMuPDF for PDF rendering, extraction, form filling, and template analysis. PyMuPDF and MuPDF are offered under the GNU AGPL and commercial licenses. CareFlow is distributed under the GNU Affero General Public License, version 3 or later, which is the project's selected compatible open-source route. A distributor that wants to use different terms must first obtain the necessary commercial licensing or replace PyMuPDF with a compatible dependency.
 
 Official licensing information: <https://pymupdf.readthedocs.io/en/latest/about.html#license-and-copyright>
 
@@ -22,7 +18,7 @@ The following source forms are third-party works and are not covered by CareFlow
 - `backend/data/templates/Online_SWD307_SSA_Application_Form_(Rev)(9_2023).pdf`
 - `backend/data/templates/joyyou_apply.pdf`
 
-Redistribution permission has not been documented in this repository, so these files are excluded from the public working tree. Operators must obtain permitted copies from the official publishers. If the project later bundles a form, it must first obtain written permission and document the exact terms.
+Redistribution permission is not documented in this repository, so these files are excluded from the public working tree. Operators must obtain permitted copies from the official publishers. If the project later bundles a form, it must first obtain written permission and document the exact terms.
 
 ## Frontend fonts
 
@@ -30,4 +26,4 @@ The frontend requests Noto Serif TC and JetBrains Mono from Google Fonts at runt
 
 ## Transitive packages
 
-Frontend and backend dependencies retain their own licenses. The release process must generate and review a dependency license report and software bill of materials. In particular, preserve attribution required by data packages such as `caniuse-lite`.
+Frontend and backend dependencies retain their own licenses. Each distributor is responsible for generating and reviewing a dependency license report and software bill of materials for its release. In particular, preserve attribution required by data packages such as `caniuse-lite`.

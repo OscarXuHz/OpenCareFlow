@@ -4,8 +4,6 @@ set -euo pipefail
 cd "$(git rev-parse --show-toplevel)"
 
 failed=0
-secret_paths="$(mktemp)"
-trap 'rm -f "$secret_paths"' EXIT
 
 report() {
   printf 'ERROR: %s\n' "$1" >&2
@@ -26,14 +24,68 @@ while IFS= read -r path; do
   fi
 done < <(git ls-files --cached --others --exclude-standard)
 
-if rg --hidden -l -g '!.git/**' -g '!.private/**' -g '!*.lock' '(-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----|\b(sk|hf)_[A-Za-z0-9_-]{16,}|\bsk-[A-Za-z0-9_-]{16,})' . >"$secret_paths"; then
-  while IFS= read -r path; do
-    report "possible secret material: $path"
-  done <"$secret_paths"
-fi
+if ! command -v python3 >/dev/null 2>&1; then
+  report "python3 is required for secret and PII scanning"
+elif ! python3 - <<'PY'
+import re
+import subprocess
+import sys
+from pathlib import Path
 
-if rg --pcre2 -n '(?<![0-9])[2-9][0-9]{3}[ -]?[0-9]{4}(?![0-9])|\b[A-WYZ][0-9]{6}\([0-9A]\)' backend/data/mock_elder_profile.json backend/data/samples/visit_note backend/tests/visit_note/transcript_example.txt backend/app/services/mock_generator.py backend/app/services/visit_note_agent/mock.py backend/app/services/welfare_form_extractor.py backend/app/llm/vision.py; then
-  report "public sample contains a realistic phone number or HKID"
+SECRET = re.compile(
+    r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"
+    r"|\b(?:sk|hf)_[A-Za-z0-9_-]{16,}"
+    r"|\bsk-[A-Za-z0-9_-]{16,}"
+)
+HK_PHONE = re.compile(r"(?<!\d)[2-9]\d{3}[ -]?\d{4}(?!\d)")
+HKID = re.compile(r"\b[A-WYZ]\d{6}\([0-9A]\)")
+PII_SCOPE = {
+  "backend/data/mock_elder_profile.json",
+  "backend/tests/visit_note/transcript_example.txt",
+  "backend/app/services/mock_generator.py",
+  "backend/app/services/visit_note_agent/mock.py",
+  "backend/app/services/welfare_form_extractor.py",
+  "backend/app/llm/vision.py",
+}
+
+raw_paths = subprocess.run(
+    ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"],
+    check=True,
+    stdout=subprocess.PIPE,
+).stdout.split(b"\0")
+
+failed = False
+for raw_path in raw_paths:
+    if not raw_path:
+        continue
+
+    path = Path(raw_path.decode("utf-8", errors="surrogateescape"))
+    if not path.is_file() or path.suffix == ".lock" or ".private" in path.parts:
+        continue
+
+    data = path.read_bytes()
+    if b"\0" in data[:8192]:
+        continue
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError:
+        continue
+
+    if SECRET.search(text):
+        print(f"ERROR: possible secret material: {path}", file=sys.stderr)
+        failed = True
+    is_sample = (
+      path.as_posix() in PII_SCOPE
+      or path.as_posix().startswith("backend/data/samples/visit_note/")
+    )
+    if is_sample and (HK_PHONE.search(text) or HKID.search(text)):
+        print(f"ERROR: realistic Hong Kong phone number or HKID: {path}", file=sys.stderr)
+        failed = True
+
+sys.exit(1 if failed else 0)
+PY
+then
+  failed=1
 fi
 
 if [ "$failed" -ne 0 ]; then

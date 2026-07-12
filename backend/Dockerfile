@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-ARG CAREFLOW_VERSION=0.4.8
+ARG CAREFLOW_VERSION=0.5.0
 
 LABEL org.opencontainers.image.title="CareFlow Backend" \
       org.opencontainers.image.version="${CAREFLOW_VERSION}" \

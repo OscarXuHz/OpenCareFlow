@@ -1,6 +1,6 @@
 # Contributing to CareFlow
 
-CareFlow is still completing its public-release and license review. Maintainers should not accept external contributions until the project license, contributor permissions, and third-party asset policy are finalized.
+CareFlow welcomes contributions that improve its safety, accessibility, reliability, and documentation. By submitting a pull request, you confirm that you have the right to submit the work and agree to license your contribution under the GNU Affero General Public License, version 3 or later.
 
 ## Before opening a change
 
@@ -54,4 +54,4 @@ A pull request should:
 - update architecture, configuration, or data-handling docs when a boundary changes;
 - identify any new dependency and its license.
 
-By contributing, you confirm that you have the right to submit the work. The maintainers must update this file with the final contribution-license terms before accepting public contributions.
+By contributing, you confirm that you have the right to submit the work and agree to license it under the GNU Affero General Public License, version 3 or later.

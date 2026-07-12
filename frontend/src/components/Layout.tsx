@@ -39,7 +39,7 @@ export default function Layout() {
               <div className="font-serif text-2xl tracking-wide text-ink-900 leading-none">
                 護 流
               </div>
-              <div className="folio mt-1">CAREFLOW · v0.4.5</div>
+              <div className="folio mt-1">CAREFLOW · v0.5.0</div>
             </div>
           </div>
           <p className="mt-4 text-[11px] leading-relaxed text-ink-400">
@@ -86,6 +86,15 @@ export default function Layout() {
             <span>強制人工審查工作流</span>
           </div>
           <div className="folio">DeepSeek-V4 · Qwen3.6-VL · Fun-ASR</div>
+          <div className="folio mt-2">© 2026 CareFlow Contributors</div>
+          <a
+            href="https://github.com/OscarXuHz/OpenCareFlow"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1 inline-block underline underline-offset-2 hover:text-ink-700"
+          >
+            Source · AGPL-3.0-or-later · no warranty
+          </a>
         </div>
       </aside>
 

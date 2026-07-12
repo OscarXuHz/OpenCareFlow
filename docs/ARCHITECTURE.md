@@ -1,7 +1,7 @@
 # CareFlow Architecture Overview
 
-Version: 0.4.8  
-Generated from the current codebase on 2026-06-29.
+Version: 0.5.0
+Generated from the current codebase on 2026-07-12.
 
 ## Executive Summary
 
@@ -231,8 +231,8 @@ Third-party welfare-form PDFs are not part of the public source tree. Version-sp
 
 The main demo deployment path is Docker Compose:
 
-- `backend`: builds `careflow-backend:0.4.8`, runs FastAPI, mounts `./backend/data:/app/data`, and stays private inside the Compose network.
-- `frontend`: builds `careflow-frontend:0.4.8`, serves the React bundle with Nginx, proxies `/api/*` to the backend, and binds only to `127.0.0.1:8080`.
+- `backend`: builds `careflow-backend:0.5.0`, runs FastAPI, mounts `./backend/data:/app/data`, and stays private inside the Compose network.
+- `frontend`: builds `careflow-frontend:0.5.0`, serves the React bundle with Nginx, proxies `/api/*` to the backend, and binds only to `127.0.0.1:8080`.
 - `cloudflared`: optional Cloudflare Tunnel sidecar or detached container that publishes the local frontend to a public HTTPS URL.
 
 Nginx provides the first public-facing protection layer:
