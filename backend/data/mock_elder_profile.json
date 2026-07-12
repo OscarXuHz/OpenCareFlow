@@ -1,0 +1,71 @@
+{
+  "_comment": "完全合成的公開示例，不對應任何真實人物、電話、地址或機構。僅供預覽、抽取與填表測試。",
+  "_synthetic": true,
+  "_version": "v0.4.0-alpha",
+  "elder_id": "MOCK-E001",
+  "name_zh": {
+    "full": "示例長者甲",
+    "family": "示例",
+    "given": "長者甲"
+  },
+  "name_en": {
+    "full": "Example Elder A",
+    "full_upper": "EXAMPLE ELDER A",
+    "family": "EXAMPLE",
+    "given": "ELDER A"
+  },
+  "hkid": {
+    "main": "X000000",
+    "check": "0",
+    "full": "X000000(0)"
+  },
+  "sex": "M",
+  "marital_status": "married",
+  "preferred_language": "zh",
+  "date_of_birth": {
+    "iso": "1948-03-15",
+    "year": "1948",
+    "month": "03",
+    "day": "15"
+  },
+  "phone_home": {
+    "area_code": "852",
+    "number": "00000000",
+    "full": "00000000"
+  },
+  "phone_mobile": {
+    "area_code": "852",
+    "number": "00000000",
+    "full": "00000000"
+  },
+  "email": "elder@example.invalid",
+  "address": {
+    "room": "0",
+    "floor": "0",
+    "block": "示例座",
+    "estate": "示例邨",
+    "street": "示例街",
+    "district": "示例區"
+  },
+  "address_text": "示例區示例街 0 號示例邨示例座 0 樓 0 室",
+  "family": {
+    "spouse_name_zh": "示例家屬乙",
+    "spouse_hkid": "X000000(0)",
+    "children_count": 2,
+    "living_with_count": 3
+  },
+  "health": {
+    "chronic_conditions": ["高血壓", "糖尿病"],
+    "mobility": "需助行器",
+    "cognitive": "輕度認知障礙"
+  },
+  "income": {
+    "monthly_self_hkd": 0,
+    "monthly_household_hkd": 12500,
+    "sources": ["子女供養", "高齡津貼"]
+  },
+  "assets": {
+    "bank_deposit_hkd": 85000,
+    "property": false
+  }
+}
