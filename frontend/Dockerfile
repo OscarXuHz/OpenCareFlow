@@ -1,7 +1,7 @@
 # 多階段：先 build，再用 nginx 提供靜態檔案。
 ARG CAREFLOW_VERSION=0.5.0
 
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --legacy-peer-deps
