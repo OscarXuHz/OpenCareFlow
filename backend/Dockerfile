@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 ARG CAREFLOW_VERSION=0.5.0
 
